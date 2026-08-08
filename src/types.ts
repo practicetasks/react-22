@@ -3,6 +3,12 @@ export type Category = {
     name: string
 }
 
-
+export type Product = {
+    id: string,
+    name: string,
+    price: number,
+    // category: Category
+    // categoryId: number
+}
 
 

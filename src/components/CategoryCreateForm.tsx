@@ -3,10 +3,11 @@ import type {Category} from "../types.ts";
 
 export type CategoryCreateFormProps = {
     categories: Category[],
-    setCategories: (categories: Category[]) => void
+    setCategories: (categories: Category[]) => void,
+    onClose: () => void
 }
 
-export function CategoryCreateForm({categories, setCategories}: CategoryCreateFormProps) {
+export function CategoryCreateForm({categories, setCategories, onClose}: CategoryCreateFormProps) {
     const [categoryName, setCategoryName] = useState('');
 
     function handleSubmit(e: React.SubmitEvent) {
@@ -15,6 +16,7 @@ export function CategoryCreateForm({categories, setCategories}: CategoryCreateFo
         setCategories([...categories, {id: crypto.randomUUID(), name: categoryName}]);
 
         setCategoryName('');
+        onClose();
     }
 
     return (

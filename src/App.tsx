@@ -1,31 +1,23 @@
 import {useState} from "react";
 import type {Category} from "./types.ts";
-import {CategoryCreateForm} from "./components/CategoryCreateForm.tsx";
-import {CategoryList} from "./components/CategoryList.tsx";
-import {CategoryUpdateForm} from "./components/CategoryUpdateForm.tsx";
+import {CategoryContent} from "./components/CategoryContent.tsx";
+import {ProductContent} from "./components/ProductContent.tsx";
 
 export function App() {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [updatingCategory, setUpdatingCategory] = useState<Category | null>(null);
-    const [updatingCategoryValue, setUpdatingCategoryValue] = useState('');
+    const [isCategoryChosen, setIsCategoryChosen] = useState<boolean>(true);
 
     return (
         <div>
-            <CategoryCreateForm categories={categories}
-                                setCategories={(categories: Category[]) => setCategories(categories)}/>
-            <CategoryList categories={categories}
-                          setUpdatingCategory={(category: Category) => {
-                              setUpdatingCategory(category)
-                              setUpdatingCategoryValue(category.name)
-                          }}/>
-            <CategoryUpdateForm
-                categories={categories}
-                updatingCategory={updatingCategory}
-                setCategories={setCategories}
-                setUpdatingCategory={setUpdatingCategory}
-                setUpdatingCategoryValue={setUpdatingCategoryValue}
-                updatingCategoryValue={updatingCategoryValue}
-            />
+            <ul>
+                <li><a onClick={() => setIsCategoryChosen(true)}>Категорий</a></li>
+                <li><a onClick={() => setIsCategoryChosen(false)}>Товары</a></li>
+            </ul>
+
+            {isCategoryChosen
+                ? <CategoryContent categories={categories} setCategories={setCategories}/>
+                : <ProductContent/>
+            }
         </div>
     )
 }

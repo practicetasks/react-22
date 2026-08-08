@@ -3,6 +3,12 @@
     margin: 0 auto;
 }
 
+.app-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -12,3 +18,24 @@ td, th {
     border: 1px solid black;
     padding: 10px;
 }
+
+.modal {
+    position: absolute;
+    inset: 0;
+    background: rgba(0 0 0 /0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    gap: 20px
+}
+
