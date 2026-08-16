@@ -1,14 +1,13 @@
 export type Category = {
-    id: string,
+    id: number,
     name: string
 }
 
 export type Product = {
-    id: string,
+    id: number,
     name: string,
     price: number,
-    // category: Category
-    // categoryId: number
+    categoryId: number
 }
 
 
