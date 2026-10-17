@@ -1,11 +1,10 @@
 import type {Category} from "../types.ts";
 import * as React from "react";
-import type {Dispatch, SetStateAction} from "react";
+import {type Dispatch, type SetStateAction, useContext, useState} from "react";
+import {CategoryContext} from "../services/store.ts";
 
 export type CategoryUpdateFormProps = {
-    categories: Category[],
     updatingCategory: Category | null,
-    setCategories: Dispatch<SetStateAction<Category[]>>,
     updatingCategoryValue: string,
     setUpdatingCategoryValue: Dispatch<SetStateAction<string>>,
     setUpdatingCategory: Dispatch<SetStateAction<Category | null>>,
@@ -13,20 +12,34 @@ export type CategoryUpdateFormProps = {
 
 export function CategoryUpdateForm(
     {
-        categories,
         updatingCategory,
-        setCategories,
         setUpdatingCategoryValue,
         setUpdatingCategory,
         updatingCategoryValue
     }: CategoryUpdateFormProps
 ) {
+    const [isCategoryNameTaken, setIsCategoryNameTaken] = useState(false);
+    const context = useContext(CategoryContext);
+    if (!context) {
+        throw new Error('CategoryContext не настроено');
+    }
+
+    const {categories, setCategories} = context;
+
     function handleUpdate(e: React.SubmitEvent) {
         e.preventDefault()
-        if (!updatingCategory) return;
+        if (!updatingCategory || !updatingCategoryValue.trim()) return;
+
+        const normalizedCategoryName = updatingCategoryValue.trim().toLocaleLowerCase();
+        const nameIsTaken = categories.some(
+            category => category.id !== updatingCategory.id
+                && category.name.trim().toLocaleLowerCase() === normalizedCategoryName
+        );
+        setIsCategoryNameTaken(nameIsTaken);
+        if (nameIsTaken) return;
 
         setCategories(categories.map(category => category.id === updatingCategory.id
-            ? {...updatingCategory, name: updatingCategoryValue}
+            ? {...updatingCategory, name: updatingCategoryValue.trim()}
             : category
         ));
 
@@ -39,8 +52,12 @@ export function CategoryUpdateForm(
             {updatingCategory && (
                 <form onSubmit={handleUpdate}>
                     <input value={updatingCategoryValue}
-                           onChange={e => setUpdatingCategoryValue(e.target.value)}/>
-                    <button>Обновить</button>
+                           onChange={e => {
+                               setUpdatingCategoryValue(e.target.value);
+                               setIsCategoryNameTaken(false);
+                           }}/>
+                    {isCategoryNameTaken && <p role="alert">Такое название уже занято</p>}
+                    <button disabled={!updatingCategoryValue.trim()}>Обновить</button>
                 </form>
             )}
         </>

@@ -1,11 +1,19 @@
 import type {Category} from "../types.ts";
+import {useContext} from "react";
+import {CategoryContext} from "../services/store.ts";
 
 export type CategoryListProps = {
-    categories: Category[],
     setUpdatingCategory: (category: Category) => void
+    onDeleteCategory: (category: Category) => void
 }
 
-export function CategoryList({categories, setUpdatingCategory}: CategoryListProps) {
+export function CategoryList({setUpdatingCategory, onDeleteCategory}: CategoryListProps) {
+    const context = useContext(CategoryContext);
+    if (!context) {
+        throw new Error('CategoryContext не настроено');
+    }
+
+    const {categories} = context;
     return (
         <table>
             <thead>
@@ -20,7 +28,7 @@ export function CategoryList({categories, setUpdatingCategory}: CategoryListProp
                     <td>{category.name}</td>
                     <td>
                         <button onClick={()=> setUpdatingCategory(category)}>Обновить</button>
-                        <button>Удалить</button>
+                        <button onClick={() => onDeleteCategory(category)}>Удалить</button>
                     </td>
                 </tr>
             ))}

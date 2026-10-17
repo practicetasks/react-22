@@ -1,10 +1,8 @@
 import {useState} from "react";
-import type {Category} from "./types.ts";
 import {CategoryContent} from "./components/CategoryContent.tsx";
 import {ProductContent} from "./components/ProductContent.tsx";
 
 export function App() {
-    const [categories, setCategories] = useState<Category[]>([]);
     const [isCategoryChosen, setIsCategoryChosen] = useState<boolean>(true);
 
     return (
@@ -15,7 +13,7 @@ export function App() {
             </ul>
 
             {isCategoryChosen
-                ? <CategoryContent categories={categories} setCategories={setCategories}/>
+                ? <CategoryContent/>
                 : <ProductContent/>
             }
         </div>
